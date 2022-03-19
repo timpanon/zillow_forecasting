@@ -1,72 +1,56 @@
+# Tanzanian Waterpoints: Ternary classification with three ML models
+**Author**: [Nick Timpano](mailto:nick.timpano@gmail.com)
 
-# Mod 4 Project - Starter Notebook
+## Overview
+In this notebook I analyze data on waterpoints located in Tanzania in order to build a model to predict the operational status of a given waterpoint. To do so, I preprocess the data and build three main kinds of machine learning models. I tune hyperparameters, evaluate and test these models and then generate predictions in order to obtain useful insights. 
 
-This notebook has been provided to you so that you can make use of the following starter code to help with the trickier parts of preprocessing the Zillow dataset. 
+#### Business Problem / Audience 
+Here, I sought to build a model to predict operational status of a given waterpoint, and unlock insights that would be useful to the Tanzanian government, or any party interested in improving waterpoint infrastructure in Tanzania. 
 
-The notebook contains a rough outline the general order you'll likely want to take in this project. You'll notice that most of the areas are left blank. This is so that it's more obvious exactly when you should make use of the starter code provided for preprocessing. 
+## Data 
+The data was provided in three main files: training labels, training values and test values. More Information can be found [here](https://www.drivendata.org/competitions/7/pump-it-up-data-mining-the-water-table/page/25/). The csv files can be viewed [here](https://github.com/timpanon/tanzanian_waterpoint_classification). 
 
-**_NOTE:_** The number of empty cells are not meant to infer how much or how little code should be involved in any given step--we've just provided a few for your convenience. Add, delete, and change things around in this notebook as needed!
+## Methods/Techniques 
+- Three types of models were fitted: XGBoost, Random Forests, and Logistic Regression 
+- Due to the class imbalance, SMOTE oversampling was used. 
+![status_group](./plots/labels_analysis.png)
+- In order to build models to best identify waterpoints that need care, recall scores for the two in need classes ('functional needs repair' and 'non functional') were maximized. Thus, false negatives (missing waterpoints that need help) were minimized. 
 
-# Some Notes Before Starting
+## Results
+- XGBoost produced the strongest model in predicting operational status of waterpoints.      
+![model comparison](./plots/model_comparison_radar.png)
+- The geography (`region`), installer (`installer`), age of the waterpoint (`construction_year`) and amount of water (`quantity_group`) all seem to have a relationship with `status_group`.  
+- Waterpoints installed by certain parties seem to have more issues.  
+![RWE Installed Waterpoints](./plots/installer_RWE_count_plot.png) 
+- These regions were predicted to have the highest concentrations of non functional waterpoints.  
+![waterpoint predictions](./plots/map_waterpoints_predictions.png)
+- The majority of dry waterpoints are non-functional.  
+![dry waterpoints](./plots/quantity_group_dry_plot.png)
 
-This project will be one of the more challenging projects you complete in this program. This is because working with Time Series data is a bit different than working with regular datasets. In order to make this a bit less frustrating and help you understand what you need to do (and when you need to do it), we'll quickly review the dataset formats that you'll encounter in this project. 
+## Conclusions 
+Based on the model and the analysis of data, these were the findings and recommendations: 
+- Visiting waterpoints in locations around Lake Victoria, and targeting waterpoints that were dry is recommended as a first priority. 
+- Focusing on these main features was recommended: quantity of water, installer, construction year and region 
 
-## Wide Format vs Long Format
+## Next Steps 
+- Other machine learning algorithms: KNN, Naive Bayes, and Support Vector Machines are missing from the above trials. Due to the size of the data, training time should be considered. 
+= More feature selection techniques: Due to the larger number of features present in the dataset, utilizing other methods to refine the feature list could improve model performance and efficiency. 
+- Metrics: As mentioned above, the final models chosen in this analysis were based on optimizing for recall of the minority classes. Other metrics, like f-1 score and precision can be prioritized in future studies. In addition other resampling techniques could be experimented with to see if this positively affects results. 
+- More feature engineering: Conducting more EDA and experimenting with other ways of creating new features could yield more positive outcomes. 
+- Further investigation: Digging deeper into some of the insights. For example, it seems like waterpoints around Lake Victoria have more issues. Why? What makes waterpoints installed by certain parties more likely to have issues?
 
-If you take a look at the format of the data in `zillow_data.csv`, you'll notice that the actual Time Series values are stored as separate columns. Here's a sample: 
+## More Information 
+To see the full EDA please see the [Jupyter Notebook](./tanzania_classification.ipynb). 
 
-<img src='../images/df_head.png'>
+For more information, contact [Nick Timpano](mailto:nick.timpano@gmail.com)
 
-You'll notice that the first seven columns look like any other dataset you're used to working with. However, column 8 refers to the median housing sales values for April 1996, column 9 for May 1996, and so on. This This is called **_Wide Format_**, and it makes the dataframe intuitive and easy to read. However, there are problems with this format when it comes to actually learning from the data, because the data only makes sense if you know the name of the column that the data can be found it. Since column names are metadata, our algorithms will miss out on what dates each value is for. This means that before we pass this data to our ARIMA model, we'll need to reshape our dataset to **_Long Format_**. Reshaped into long format, the dataframe above would now look like:
+## Repo Structure 
 
-<img src='../images/melted1.png'>
-
-There are now many more rows in this dataset--one for each unique time and zipcode combination in the data! Once our dataset is in this format, we'll be able to train an ARIMA model on it. The method used to convert from Wide to Long is `pd.melt()`, and it is common to refer to our dataset as 'melted' after the transition to denote that it is in long format. 
-
-# Helper Functions Provided
-
-Melting a dataset can be tricky if you've never done it before, so you'll see that we have provided a sample function, `melt_data()`, to help you with this step below. Also provided is:
-
-* `get_datetimes()`, a function to deal with converting the column values for datetimes as a pandas series of datetime objects
-* Some good parameters for matplotlib to help make your visualizations more readable. 
-
-Good luck!
-
-
-# Step 1: Load the Data/Filtering for Chosen Zipcodes
-
-# Step 2: Data Preprocessing
-
-
-```python
-def get_datetimes(df):
-    return pd.to_datetime(df.columns.values[1:], format='%Y-%m')
 ```
-
-# Step 3: EDA and Visualization
-
-
-```python
-font = {'family' : 'normal',
-        'weight' : 'bold',
-        'size'   : 22}
-
-matplotlib.rc('font', **font)
-
-# NOTE: if you visualizations are too cluttered to read, try calling 'plt.gcf().autofmt_xdate()'!
+├── plots
+├── tanzania_test_values.csv
+├── tanzania_training_labels.csv
+├── tanzania_training_values.csv
+├── README.md
+└── tanzania_classification.ipynb
 ```
-
-# Step 4: Reshape from Wide to Long Format
-
-
-```python
-def melt_data(df):
-    melted = pd.melt(df, id_vars=['RegionName', 'City', 'State', 'Metro', 'CountyName'], var_name='time')
-    melted['time'] = pd.to_datetime(melted['time'], infer_datetime_format=True)
-    melted = melted.dropna(subset=['value'])
-    return melted.groupby('time').aggregate({'value':'mean'})
-```
-
-# Step 5: ARIMA Modeling
-
-# Step 6: Interpreting Results
