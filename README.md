@@ -31,11 +31,11 @@ Based on the models prodduced and the analysis of data, these were the findings 
 - Specifically, Livingston was ranked best in both short and long term ROI. However, when looking for houses at or below the average home value, Pompton Lakes and South Plainfield are more recommended. 
 
 ## Next Steps 
-It could be interesting to add exogenous variables to the model for housing prices. These can be engineered within the data, such as a variable for quarter, or come externally, such as mortgage rates or GDP data. However, in order to forecast ahead of any existing data, those exogenous variables themselves would also need to be forecast as well. If you have a good read on where something correlated with housing prices will be over a longer period of time though, it could be worth factoring that into the model. 
-This analysis did not consider factors that would be important to purchase a home for living. It does not consider school systems, crime rate, or other factors that are important for wellbeing. It is purely based on price, and realizing an investment on a single family residence property. 
-In future studies, one could group data by town, as opposed to zip codes, since many towns contain several zip codes. 
-Prices could be adjusted for inflation, and ROI could be recalculated based on predicted inflation levels. 
-This project was done only with northern NJ in mind. There are many other areas of NJ and of course other states entirely with plentiful real estate data.
+- It could be interesting to add exogenous variables to the model for housing prices. These can be engineered within the data, such as a variable for quarter, or come externally, such as mortgage rates or GDP data. However, in order to forecast ahead of any existing data, those exogenous variables themselves would also need to be forecast as well. If you have a good read on where something correlated with housing prices will be over a longer period of time though, it could be worth factoring that into the model. 
+- This analysis did not consider factors that would be important to purchase a home for living. It does not consider school systems, crime rate, or other factors that are important for wellbeing. It is purely based on price, and realizing an investment on a single family residence property. 
+- In future studies, one could group data by town, as opposed to zip codes, since many towns contain several zip codes. 
+- Prices could be adjusted for inflation, and ROI could be recalculated based on predicted inflation levels. 
+- This project was done only with northern NJ in mind. There are many other areas of NJ and of course other states entirely with plentiful real estate data.
 
 ## More Information 
 To see the full EDA please see the [Jupyter Notebook](./zillow_forecasting.ipynb). 
